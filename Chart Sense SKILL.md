@@ -1,6 +1,6 @@
 ---
 name: chart-sense
-description: Generate interactive ECharts data visualization pages from any data input. Automatically selects the best chart type, applies a built-in SaaS design system, and supports plugging in external design systems (Pacvue, IBM Carbon, custom tokens). Use when the user provides data and asks for a chart, dashboard, or visualization. Trigger phrases: "chart sense", "给我生成图表", "visualize this data", "帮我出图", "generate chart", "数据可视化".
+description: 'Generate interactive ECharts data visualization pages from any data input. Automatically selects the best chart type, applies a built-in SaaS design system, and supports plugging in external design systems (IBM Carbon, custom tokens). Use when the user provides data and asks for a chart, dashboard, or visualization. Trigger phrases: "chart sense", "给我生成图表", "visualize this data", "帮我出图", "generate chart", "数据可视化".'
 ---
 
 # Chart Sense

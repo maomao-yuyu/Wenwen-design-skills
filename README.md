@@ -1,15 +1,28 @@
-# UI Design QA Skill — v1.0
+# Wenwen Design Skills
 
-> **Created by:** Wenwen Lu (`WenWen.lu`) 
-> **Version:** 1.0  
-> **Language:** English / 中文  
+> **Created by:** Wenwen Lu (`WenWen.lu`)
+> **Language:** English / 中文
 > **License:** Proprietary. Do not copy, modify, or redistribute without written permission from the author.
+
+A collection of Cursor AI Skills built for UX/UI designers to improve efficiency across design QA, data visualization, and Figma workflows.
 
 ---
 
-## What is this?
+## Skills in this repo
 
-This Cursor AI Skill automates the UI acceptance testing workflow between a live frontend and Figma design files. It replaces the slow, error-prone manual review process with a precise, programmatic comparison that catches issues the human eye often misses.
+| Skill | Version | What it does |
+|---|---|---|
+| [UI Design QA](#-ui-design-qa-skill--v10) | v1.0 | Automated UI acceptance testing between frontend and Figma |
+| [Chart Sense](#-chart-sense--v20) | v2.0 | Generate interactive ECharts visualizations from any data |
+| [Send to Figma](#-send-to-figma-skill) | v1.0 | Capture web pages and send them directly into Figma |
+
+---
+
+---
+
+## 🔍 UI Design QA Skill — v1.0
+
+> Automates UI acceptance testing between a live frontend and Figma design files.
 
 **What it compares (5 dimensions):**
 
@@ -21,89 +34,225 @@ This Cursor AI Skill automates the UI acceptance testing workflow between a live
 | **Spacing** | Computed `padding`, `gap`, `border-radius` in pixels |
 | **Typography** | `font-size`, `font-weight` (e.g. 400/500/600/700), `line-height` |
 
----
+### How to use
 
-## How to use
+**Prerequisites:** Cursor IDE · Figma account · Jira account · Node.js
 
-### Prerequisites
+**Step 1 — Activate**
 
-- [Cursor IDE](https://www.cursor.com/) with this skill installed
-- Figma account with design access
-- Jira account with issue edit permission
-- Node.js installed on your machine
+Say in Cursor chat:
+> "Help me compare the frontend against Figma and upload issues to Jira."
 
-### Step 1 — Activate the skill
-
-In any Cursor chat window, just describe what you need in natural language. The skill activates automatically when you say something like:
-
-> "Help me compare the frontend against Figma and upload issues to Jira."  
-> "Review these pages against Figma and log issues."
-
-### Step 2 — Provide the inputs
-
-The AI will ask you to supply (if not already provided):
+**Step 2 — Provide inputs**
 
 ```
 1. Frontend page URL(s)
 2. Figma design URL(s)
-3. Login credentials for the frontend (if login required)
+3. Login credentials for the frontend (if required)
 4. Jira ticket URL
 5. (Optional) Interaction path
 ```
 
-### Step 3 — Let the AI work
-
-The skill will:
-1. Fetch Figma design tokens (colors, fonts, spacing) using Figma MCP
-2. Launch a headless browser (Playwright), log in, navigate to the page
-3. Extract computed CSS values from the live DOM
-4. Compare Figma values vs. frontend values across all 5 dimensions
-5. Build structured Jira issue rows in ADF format
-6. Append all new issues to your Jira ticket without deleting existing rows
-
-### Step 4 — Review results
-
-After completion, you receive a summary in the following format:
+**Step 3 — Review results**
 
 ```
 ✅ Written to [ISSUE-KEY]
 Added N issues (seq X ~ Y):
-  [seq] [module / element] — [property] mismatch: [frontend value] vs Figma [design value]
-  ...
+  [seq] [module] — [property] mismatch: [frontend] vs Figma [design]
+```
+
+**FAQ**
+
+- Works with any JS SPA; best results with Vue 3 / Element Plus
+- Supports username + password login (not SSO/2FA)
+- Auto-switches to REST API when ADF exceeds 20KB
+
+---
+
+---
+
+## 📊 Chart Sense — v2.0
+
+> Give it data. It decides the chart. It generates the page.
+
+| Field | Value |
+|---|---|
+| **Creator** | Lu Wenwen |
+| **Version** | 2.0 |
+| **Chart library** | Apache ECharts 5 (CDN · no install) |
+| **License** | Non-commercial · 禁止商用 |
+
+### How to activate
+
+Say any of the following in Cursor chat:
+
+```
+"chart sense"
+"visualize this data"
+"帮我出图"
+"generate chart"
+"数据可视化"
+```
+
+Or simply paste your data and ask for a chart.
+
+---
+
+### Step 1 — Paste your data (any format)
+
+Chart Sense accepts data in **any format** — no need to clean it up first:
+
+```
+Plain text:      "Q1: 120, Q2: 340, Q3: 280, Q4: 410"
+Markdown table:  | Category | Value | ...
+CSV:             category,value\nA,120\nB,340
+JSON:            [{"label":"A","value":120}]
+Description:     "top 5 products by revenue: A $4.2M, B $3.8M..."
 ```
 
 ---
 
-## Frequently Asked Questions
+### Step 2 — AI selects chart type automatically
 
-**Q: Does it work with any frontend framework?**  
-A: Best results with Vue 3 / Element Plus (the computed CSS extraction is optimized for these selectors). It works with any JavaScript SPA but selectors may need adjustment for the first run.
+| Data shape | Chart selected |
+|---|---|
+| One metric over time | Line |
+| Multiple metrics over time | Multi-line |
+| Comparing categories, ≤ 8 | Vertical bar |
+| Comparing categories, > 8 or long labels | Horizontal bar |
+| Part-of-whole, ≤ 6 slices | Pie |
+| Part-of-whole, > 6 slices | Donut |
+| Two numeric variables | Scatter |
+| Multiple metrics per category | Radar |
+| Two metrics, different scales, same time axis | Combo (bar + line) |
+| Additive segments over time | Stacked bar |
 
-**Q: What if the page requires login with SSO or 2FA?**  
-A: Currently supports username + password login. SSO/2FA flows require manual session token handling.
+Before generating, the AI tells you in chat:
+```
+Data: [what it detected]
+Chart: [selected type]
+Reason: [one sentence explanation]
+```
 
-**Q: What if the Figma node has no exact design tokens (e.g. it's an image)?**  
-A: The skill falls back to visual screenshot comparison and notes "design tokens unavailable" in the issue.
+You can always override by saying `"use bar chart"` or `"I want a pie chart"`.
 
-**Q: Can it compare multiple pages in one run?**  
-A: Yes. Provide a list of pages and corresponding Figma nodes. The skill processes them sequentially and uploads all issues in a single Jira write operation.
+---
 
-**Q: What if the ADF file is very large?**  
-A: The skill automatically switches to Jira REST API (`curl PUT`) when the ADF exceeds 20KB, bypassing tool argument size limits.
+### Step 3 — Choose a design system (optional)
+
+Chart Sense ships with **7 built-in presets**. Default is `linear` (Modern SaaS Blue).
+
+| Preset | Vibe | How to activate |
+|---|---|---|
+| `linear` *(default)* | Modern SaaS · blue-purple | — |
+| `tableau` | Classic · industry standard | `"use tableau preset"` |
+| `echarts6` | Official ECharts 6 theme | `"use echarts6 preset"` |
+| `tailwind` | Clean SaaS · Tailwind colors | `"use tailwind preset"` |
+| `muted` | Warm earth · low fatigue | `"use muted preset"` |
+| `midnight` | Cool vivid · high energy | `"use midnight preset"` |
+| `pastel` | Soft · airy | `"use pastel preset"` |
+
+**You can also bring your own design system in 3 ways:**
+
+**Way A — Named system:**
+```
+"use Pacvue design system"
+"use IBM Carbon"
+"use Material Design"
+```
+
+**Way B — CSS token object:**
+```javascript
+{
+  '--color-primary': '#FF6B35',
+  '--font-base': 'Inter, sans-serif',
+  '--chart-colors': '#FF6B35,#004E89,#2DC653'
+}
+```
+
+**Way C — Plain description:**
+```
+"use warm orange tones, Inter font, clean minimal style"
+"corporate blue-green palette, dense data layout"
+```
+
+---
+
+### Step 4 — Get the output
+
+Chart Sense generates a **single self-contained HTML file**:
+
+- ✅ No build step — open directly in browser
+- ✅ ECharts 5 loaded from CDN
+- ✅ Interactive: hover tooltips, legend toggle, zoom/pan
+- ✅ Design panel on the right — switch presets live without reload
+- ✅ Collapsible raw data table below chart
+- ✅ Responsive: resizes with window
+
+**File saved to:**
+```
+doc/design-exploration/chart-sense-[data-slug].html
+```
+
+**Summary reported in chat:**
+```
+✓ Chart Sense generated: doc/design-exploration/chart-sense-quarterly-data.html
+  Chart type:     Line
+  Design system:  Linear SaaS Blue
+  Series count:   1
+```
+
+---
+
+### Quick examples
+
+```
+"Chart Sense: Q1 120, Q2 340, Q3 280, Q4 410"
+→ Line chart · linear preset
+
+"Chart Sense: Apple 35%, Google 28%, Microsoft 19%, Others 18%"
+→ Pie chart · linear preset
+
+"Chart Sense: [markdown table] — use IBM Carbon"
+→ Bar chart · carbon preset
+
+"帮我出图: [数据] — 用 tailwind 配色"
+→ Chart · tailwind preset applied
+
+"Chart Sense: [data] — colors: #FF6B35, #004E89; font: Roboto"
+→ Chart · custom tokens applied
+```
+
+---
+
+---
+
+## 🔗 Send to Figma Skill
+
+> Capture a local web page or URL and send it directly into a Figma file/page.
+
+### How to activate
+
+```
+"把当前页面发送到 Figma"
+"send this page to Figma"
+"把指定页面发送到 Figma"
+```
+
+---
 
 ---
 
 ## Attribution & Legal
 
-This skill was designed and created by **Wenwen Lu** (`Wenwen.lu`) as part of the Global Design System quality process.
+All skills in this repository were designed and created by **Wenwen Lu** (`Wenwen.lu`).
 
-- The authorship attribution (`Wenwen.lu`, `Wenwen Lu`) embedded in this skill **must not be removed or altered**.
-- This skill file **must not be copied, re-published, or redistributed** without written permission.
-- Modifications to this skill file by anyone other than the original author are **not permitted**.
-- The encoded implementation sections protect the proprietary methodology. Do not attempt to extract, reuse, or re-publish the decoded content.
+- Authorship attribution must not be removed or altered.
+- Skill files must not be copied, re-published, or redistributed without written permission.
+- Modifications by anyone other than the original author are not permitted.
 
-For questions or licensing inquiries, contact the author through Global internal channels.
+For licensing inquiries, contact the author through internal channels.
 
 ---
 
-*UI Design QA Skill · Version 1.0 · © 2024-2026 Wenwen Lu*
+*Wenwen Design Skills · © 2024-2026 Wenwen Lu*

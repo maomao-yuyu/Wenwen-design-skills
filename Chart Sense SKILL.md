@@ -1,6 +1,6 @@
 ---
 name: chart-sense
-description: 'Generate interactive ECharts data visualization pages from any data input. Automatically selects the best chart type, applies a built-in SaaS design system, and supports plugging in external design systems (Pacvue, IBM Carbon, custom tokens). Use when the user provides data and asks for a chart, dashboard, or visualization. Trigger phrases: "chart sense", "给我生成图表", "visualize this data", "帮我出图", "generate chart", "数据可视化".'
+description: Generate interactive ECharts data visualization pages from any data input. Automatically selects the best chart type, applies a built-in SaaS design system, and supports plugging in external design systems (Pacvue, IBM Carbon, custom tokens). Use when the user provides data and asks for a chart, dashboard, or visualization. Trigger phrases: "chart sense", "给我生成图表", "visualize this data", "帮我出图", "generate chart", "数据可视化".
 ---
 
 # Chart Sense
@@ -132,20 +132,8 @@ User can say `use preset [name]` to switch:
 Users can plug in their own design system in three ways:
 
 ### Way A — Named system
-```
-"use pacvue design system"
-"use IBM Carbon"
-"use Material Design"
-"use tailwind preset"
-```
 
-**Built-in named mappings:**
-
-| Name | Colors | Font | Notes |
-|---|---|---|---|
-| `pacvue` | `#0253B6` + brand palette | Inter | Pacvue product blue |
-| `carbon` | `#0f62fe` + IBM palette | IBM Plex Sans | IBM Carbon systematic |
-| `material` | `#1976D2` + Material 3 | Roboto | Google Material You |
+Tell the AI which design system you want to use by name. If it's a well-known system (such as IBM Carbon, Material Design, or any major public design system), the AI will look up its standard colors, fonts, and spacing and apply them automatically. You can also name any custom or internal design system — the AI will ask you for its token details if it doesn't already know them.
 
 ### Way B — CSS token object
 ```javascript
